@@ -1,17 +1,4 @@
-import property from 'lodash/property';
-import { createGlobalStyle } from 'styled-components';
+import * as statics from './statics';
+import render from './render';
 
-export default createGlobalStyle`
-  html {
-    background-color: #fff;
-    opacity: 1;
-  }
-
-  body {
-    font-family: ${property('theme.typography.main')};
-  }
-
-  figure {
-    margin: 0;
-  }
-`;
+export default Object.assign(render, statics);

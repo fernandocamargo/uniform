@@ -1,11 +1,4 @@
-import { ThemeProvider as Theming } from 'styled-components';
+import * as statics from './statics';
+import render from './render';
 
-import theme from 'themes/default';
-import { App, Style } from 'components';
-
-export default () => (
-  <Theming theme={theme}>
-    <Style />
-    <App />
-  </Theming>
-);
+export default Object.assign(render, statics);
