@@ -29,6 +29,8 @@ export default (settings) => {
   const formik = useFormik(form);
 
   return update(formik, {
-    components: { $set: { fields: { email: Text, password: Text } } },
+    components: {
+      $set: { fields: { email: Text, name: Text, password: Text } },
+    },
   });
 };

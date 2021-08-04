@@ -33,10 +33,12 @@ export default () => {
   } = useForm({ fields, onSubmit });
   const {
     components: {
-      fields: { password: Password },
+      fields: { name: Name, password: Password },
     },
+    fake: goy,
     ...second
   } = useForm({ fields, onSubmit });
+  const third = useForm({ fields, onSubmit });
 
   return (
     <>
@@ -51,7 +53,10 @@ export default () => {
         <hr />
         <pre>{JSON.stringify(second.values, null, 2)}</pre>
         <hr />
+        <Name label="Please, provide your name" />
         <Password label="Please, provide your password">lol</Password>
+        <hr />
+        <pre>{JSON.stringify(third.values, null, 2)}</pre>
       </div>
     </>
   );
