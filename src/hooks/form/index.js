@@ -29,8 +29,6 @@ export default ({ hash, ...settings }) => {
   }, [settings]);
   const formik = useFormik(form);
 
-  console.log({ hash });
-
   return update(formik, {
     components: {
       $set: {
