@@ -1,6 +1,5 @@
-const { exit } = require('process');
-const isEqual = require('lodash/isEqual');
 const { createMacro } = require('babel-plugin-macros');
+const { Persistence } = require('./libs');
 
 function macro({
   babel: {
@@ -8,35 +7,68 @@ function macro({
       identifier,
       importDeclaration,
       importSpecifier,
-      isObjectPattern,
+      isVariableDeclarator,
+      jSXAttribute,
+      jSXClosingElement,
+      jSXElement,
+      jSXExpressionContainer,
+      jSXIdentifier,
+      jSXOpeningElement,
+      memberExpression,
+      objectProperty,
       stringLiteral,
     },
   },
   state: {
     file: { path: program },
+    filename,
   },
   references: { default: references },
 }) {
-  const aliases = references.reduce((stack, reference, index) => {
-    console.log({ index });
+  const extract = (stack, { parentPath: { parentPath } }, index) => {
+    const { check, get, identify } = new Persistence({
+      state: stack,
+      filename,
+      index,
+    });
 
-    reference.parentPath.parentPath.traverse({
+    parentPath.traverse({
+      CallExpression(path) {
+        path.traverse({
+          ObjectExpression(path) {
+            path.pushContainer(
+              'properties',
+              objectProperty(identifier('hash'), stringLiteral(identify()))
+            );
+          },
+        });
+      },
       Identifier(path) {
-        if (path.findParent(isObjectPattern) && isEqual(path.key, 'value')) {
-          console.log('===>', path.node.name);
+        return check(path);
+      },
+      ObjectPattern(path) {
+        if (isVariableDeclarator(path.parentPath)) {
+          path.unshiftContainer(
+            'properties',
+            objectProperty(identifier(identify()), identifier(identify()))
+          );
         }
       },
     });
 
-    return stack;
-  }, {});
+    return get();
+  };
+  const components = references.reduce(extract, {});
 
-  exit(1);
-
-  return program.traverse({
-    ImportDeclaration(path) {
-      if (path.node.source.value.endsWith('/macros/form/macro')) {
-        path.parentPath.pushContainer(
+  program.traverse({
+    ImportDeclaration({
+      node: {
+        source: { value },
+      },
+      parentPath,
+    }) {
+      if (value.endsWith('/macros/form/macro')) {
+        parentPath.pushContainer(
           'body',
           importDeclaration(
             [importSpecifier(identifier('useForm'), identifier('useForm'))],
@@ -46,14 +78,41 @@ function macro({
       }
     },
     JSXElement(path) {
-      if (
-        ['Email', 'Name', 'Password'].includes(
-          path.node.openingElement.name.name
-        )
-      ) {
+      const {
+        node: {
+          openingElement: {
+            name: { name },
+            attributes,
+          },
+        },
+      } = path;
+      const { [name]: component } = components;
+
+      if (component) {
         path.replaceWith(
-          stringLiteral(`<${path.node.openingElement.name.name} />`)
+          jSXElement(
+            jSXOpeningElement(
+              jSXIdentifier(name),
+              attributes.concat(
+                jSXAttribute(
+                  jSXIdentifier('value'),
+                  jSXExpressionContainer(
+                    memberExpression(
+                      memberExpression(
+                        identifier(component.hash),
+                        identifier('values')
+                      ),
+                      identifier(component.key)
+                    )
+                  )
+                )
+              )
+            ),
+            jSXClosingElement(jSXIdentifier(name)),
+            []
+          )
         );
+        path.skip();
       }
     },
   });
