@@ -65,7 +65,7 @@ export default () => {
         <hr />
         <pre>{JSON.stringify(second.values, null, 2)}</pre>
         <hr />
-        <Memo label="Please, provide your name" />
+        <Memo label="Please, provide your memo" />
         <Password label="Please, provide your password">lol</Password>
         <hr />
         <pre>{JSON.stringify(third.values, null, 2)}</pre>

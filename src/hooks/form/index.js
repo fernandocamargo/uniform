@@ -1,7 +1,7 @@
 import get from 'lodash/get';
 import noop from 'lodash/noop';
 import update from 'immutability-helper';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useFormik } from 'formik';
 
 import { Form } from 'components/widgets';
@@ -28,6 +28,29 @@ export default ({ hash, ...settings }) => {
     return update(defaults, transformations);
   }, [settings]);
   const formik = useFormik(form);
+  const { setStatus, submitForm, validateForm } = formik;
+  const analyze = useCallback(
+    () => (report) => {
+      const errors = Object.keys(report);
+
+      return !errors.length ? submitForm() : Promise.reject(errors);
+    },
+    [submitForm]
+  );
+  const debug = useCallback((errors) => console.log({ errors }), []);
+  const validate = useCallback(
+    () => validateForm().then(analyze).catch(debug),
+    [analyze, debug, validateForm]
+  );
+  const submit = useCallback(
+    (event) => {
+      event.preventDefault();
+      setStatus({ debugging: true });
+
+      return validate();
+    },
+    [setStatus, validate]
+  );
 
   return update(formik, {
     components: {
@@ -36,6 +59,6 @@ export default ({ hash, ...settings }) => {
         form: Form,
       },
     },
-    ...(!!hash && { [hash]: { $set: formik } }),
+    ...(!!hash && { [hash]: { $set: { values: formik.values, submit } } }),
   });
 };

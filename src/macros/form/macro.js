@@ -1,9 +1,13 @@
+const { exit } = require('process');
 const { createMacro } = require('babel-plugin-macros');
 const { Persistence } = require('./libs');
 
 function macro({
   babel: {
     types: {
+      arrayExpression,
+      arrowFunctionExpression,
+      callExpression,
       identifier,
       importDeclaration,
       importSpecifier,
@@ -17,6 +21,8 @@ function macro({
       memberExpression,
       objectProperty,
       stringLiteral,
+      variableDeclaration,
+      variableDeclarator,
     },
   },
   state: {
@@ -42,6 +48,23 @@ function macro({
             );
           },
         });
+        path.parentPath.parentPath.insertAfter(
+          variableDeclaration('const', [
+            variableDeclarator(
+              identifier(`onChange${index}`),
+              callExpression(identifier('useCallback'), [
+                arrowFunctionExpression(
+                  [identifier('value')],
+                  callExpression(
+                    memberExpression(identifier('console'), identifier('log')),
+                    [identifier('value')]
+                  )
+                ),
+                arrayExpression([]),
+              ])
+            ),
+          ])
+        );
       },
       Identifier(path) {
         return check(path);
@@ -116,6 +139,8 @@ function macro({
       }
     },
   });
+
+  // exit(1);
 }
 
 module.exports = createMacro(macro);
