@@ -1,56 +1,28 @@
-import { string } from 'yup';
-import { useCallback, useMemo } from 'react';
+import { object, string } from 'yup';
 import { Helmet as Metatags } from 'react-helmet';
 
 import useForm from '../../../../macros/form/macro';
 import { Text } from 'components/widgets/fields';
 
-export const fields = [
-  {
-    component: Text,
-    name: 'name',
-    validation: string().trim().min(10).max(50).required(),
-  },
-  {
-    component: Text,
-    name: 'email',
-    value: 'f.camargo',
-    validation: string().trim().min(3).max(255).email().required(),
-  },
-  { component: Text, name: 'password', value: '1234' },
-];
+export const validationSchema = object().shape({
+  email: string().trim().min(3).max(255).email().required(),
+  password: string().trim().min(10).max(50).required(),
+});
+
+const initialValues = {
+  name: 'Fernando Camargo',
+  email: 'f.camargo@expertlead.de',
+  password: '1234',
+};
+
+const onSubmit = (data) => console.log('submit();', { data });
 
 export default () => {
-  const memo = useMemo(
-    () => [
-      {
-        component: Text,
-        name: 'memo',
-        validation: string().trim().min(10).max(50).required(),
-      },
-    ],
-    []
-  );
-  const onSubmit = useCallback(
-    (data) => console.log('submit();', { data }),
-    []
-  );
   const {
-    components: {
-      fields: { email: Email, password: Password },
-    },
+    fields: { name: fullName, email, password },
+    form,
     values,
-  } = useForm({ fields, onSubmit });
-  const {
-    components: {
-      fields: { memo: Memo },
-    },
-    ...second
-  } = useForm({ fields: memo, onSubmit });
-  const third = useForm({ fields, onSubmit });
-  const {
-    components: { form: Form },
-  } = useForm({ fields, onSubmit });
+  } = useForm({ initialValues, onSubmit, validationSchema });
 
   return (
     <>
@@ -59,18 +31,16 @@ export default () => {
       </Metatags>
       <div>
         <h1>Basic</h1>
+        <form form={form}>
+          <fieldset>
+            <legend>Login</legend>
+            <Text field={fullName} label="Please, provide your full name" />
+            <Text field={email} label="Please, provide your e-mail" />
+            <Text field={password} label="Please, provide your pasword" />
+          </fieldset>
+        </form>
+        <hr />
         <pre>{JSON.stringify(values, null, 2)}</pre>
-        <hr />
-        <Email label="Please, provide your e-mail" />
-        <hr />
-        <pre>{JSON.stringify(second.values, null, 2)}</pre>
-        <hr />
-        <Memo label="Please, provide your memo" />
-        <Password label="Please, provide your password">lol</Password>
-        <hr />
-        <pre>{JSON.stringify(third.values, null, 2)}</pre>
-        <Form />
-        <p>LOL</p>
       </div>
     </>
   );
