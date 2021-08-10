@@ -1,9 +1,11 @@
+// const { exit } = require('process');
 const first = require('lodash/first');
 const isEqual = require('lodash/isEqual');
+const startCase = require('lodash/startCase');
 const { createMacro } = require('babel-plugin-macros');
 const { encrypt, identify, trace } = require('./helpers');
 
-const ALLOWED = ['fields'];
+const ALLOWED = ['fields', 'form'];
 
 function macro({
   babel: {
@@ -22,6 +24,7 @@ function macro({
       jSXAttribute,
       jSXExpressionContainer,
       jSXIdentifier,
+      logicalExpression,
       memberExpression,
       objectProperty,
       stringLiteral,
@@ -67,17 +70,82 @@ function macro({
     return parentPath.traverse({
       Identifier(path) {
         const { key, name } = identify(path);
-        const isAllowed = () => ALLOWED.includes(first(trace(path)).key);
-        const isReplaceable = (binding) => isAllowed() && binding;
+        const tokens = {
+          onChange: identifier([hash, 'OnChange', startCase(key)].join('')),
+        };
+        const isReplaceable = (binding) => {
+          const { key: type } = first(trace(path));
+
+          return (
+            binding &&
+            binding.referenced &&
+            ALLOWED.includes(type) && { binding, type }
+          );
+        };
         const replaceable =
           isEqual(path.key, 'value') &&
           path.findParent(isObjectPattern) &&
           isReplaceable(parentPath.scope.getBinding(name));
+        const inject = () => {
+          switch (replaceable.type) {
+            case 'form':
+              return [
+                jSXAttribute(jSXIdentifier('id'), stringLiteral(hash)),
+                jSXAttribute(
+                  jSXIdentifier('onSubmit'),
+                  jSXExpressionContainer(
+                    memberExpression(identifier(hash), identifier('submit'))
+                  )
+                ),
+              ];
+            case 'fields':
+              return [
+                jSXAttribute(
+                  jSXIdentifier('id'),
+                  stringLiteral([hash, key].join('.'))
+                ),
+                jSXAttribute(
+                  jSXIdentifier('error'),
+                  jSXExpressionContainer(
+                    logicalExpression(
+                      '&&',
+                      memberExpression(
+                        identifier(hash),
+                        identifier('debugging')
+                      ),
+                      memberExpression(
+                        memberExpression(
+                          identifier(hash),
+                          identifier('errors')
+                        ),
+                        identifier(key)
+                      )
+                    )
+                  )
+                ),
+                jSXAttribute(
+                  jSXIdentifier('onChange'),
+                  jSXExpressionContainer(tokens.onChange)
+                ),
+                jSXAttribute(
+                  jSXIdentifier('value'),
+                  jSXExpressionContainer(
+                    memberExpression(
+                      memberExpression(identifier(hash), identifier('values')),
+                      identifier(key)
+                    )
+                  )
+                ),
+              ];
+            default:
+              return [];
+          }
+        };
         const replace = (path) => {
           parentPath.parentPath.insertAfter(
             variableDeclaration('const', [
               variableDeclarator(
-                identifier(`onChange${key}`),
+                tokens.onChange,
                 callExpression(identifier('useOnChange'), [
                   arrowFunctionExpression(
                     [identifier('value')],
@@ -106,31 +174,13 @@ function macro({
 
           path
             .findParent(isJSXOpeningElement)
-            .pushContainer('attributes', [
-              jSXAttribute(
-                jSXIdentifier('id'),
-                stringLiteral([hash, key].join('.'))
-              ),
-              jSXAttribute(
-                jSXIdentifier('onChange'),
-                jSXExpressionContainer(identifier(`onChange${key}`))
-              ),
-              jSXAttribute(
-                jSXIdentifier('value'),
-                jSXExpressionContainer(
-                  memberExpression(
-                    memberExpression(identifier(hash), identifier('values')),
-                    identifier(key)
-                  )
-                )
-              ),
-            ]);
+            .pushContainer('attributes', inject());
 
           return path.findParent(isJSXAttribute).remove();
         };
 
         return void (
-          replaceable && replaceable.referencePaths.forEach(replace)
+          replaceable && replaceable.binding.referencePaths.forEach(replace)
         );
       },
       ObjectExpression(path) {
@@ -150,6 +200,8 @@ function macro({
       },
     });
   });
+
+  // exit(1);
 
   return program;
 }

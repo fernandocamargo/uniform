@@ -5,8 +5,8 @@ import useForm from '../../../../macros/form/macro';
 import { Text } from 'components/widgets/fields';
 
 export const validationSchema = object().shape({
-  email: string().trim().min(3).max(255).email().required(),
-  password: string().trim().min(10).max(50).required(),
+  email: string().trim().min(3).max(50).email().required(),
+  password: string().trim().min(3).max(50).required(),
 });
 
 const initialValues = {
@@ -20,7 +20,9 @@ const onSubmit = (data) => console.log('submit();', { data });
 export default () => {
   const {
     fields: { name: fullName, email, password },
+    dirty,
     form,
+    resetForm,
     values,
   } = useForm({ initialValues, onSubmit, validationSchema });
 
@@ -37,6 +39,12 @@ export default () => {
             <Text field={fullName} label="Please, provide your full name" />
             <Text field={email} label="Please, provide your e-mail" />
             <Text field={password} label="Please, provide your pasword" />
+            <button disabled={!dirty} type="submit">
+              Submit
+            </button>
+            <button disabled={!dirty} onClick={resetForm} type="reset">
+              Reset
+            </button>
           </fieldset>
         </form>
         <hr />
