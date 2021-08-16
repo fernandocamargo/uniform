@@ -1,8 +1,3 @@
-export default {
-  typography: {
-    main: "'Roboto', sans-serif",
-  },
-  background: '#fff',
-  color: '#282c34',
-  opacity: 0.5,
-};
+import { createTheme } from '@material-ui/core/styles';
+
+export default createTheme();

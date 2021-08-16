@@ -1,18 +1,24 @@
-import { forwardRef, useCallback } from 'react';
+import { forwardRef, useMemo } from 'react';
+import { TextField } from '@material-ui/core';
 
-export default forwardRef(
-  ({ onChange: change, className, error, id, label, value }, ref) => {
-    const onChange = useCallback(
-      ({ target: { value } }) => change(value),
-      [change]
-    );
+import use from './hooks';
 
-    return (
-      <div className={className}>
-        <label htmlFor={id}>{label}</label>
-        <input id={id} onChange={onChange} ref={ref} value={value} />
-        {!!error && <p style={{ color: 'red' }}>{error}</p>}
-      </div>
-    );
-  }
-);
+export default forwardRef((props, ref) => {
+  const { className, error, helperText, id, label, onChange, value, variant } =
+    use(props);
+  const classes = useMemo(() => ({ root: className }), [className]);
+
+  return (
+    <TextField
+      classes={classes}
+      error={error}
+      helperText={helperText}
+      id={id}
+      label={label}
+      onChange={onChange}
+      ref={ref}
+      value={value}
+      variant={variant}
+    />
+  );
+});

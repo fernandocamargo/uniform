@@ -1,4 +1,3 @@
-// const { exit } = require('process');
 const first = require('lodash/first');
 const isEqual = require('lodash/isEqual');
 const startCase = require('lodash/startCase');
@@ -200,8 +199,6 @@ function macro({
       },
     });
   });
-
-  // exit(1);
 
   return program;
 }

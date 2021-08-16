@@ -2,24 +2,29 @@ import { object, string } from 'yup';
 import { Helmet as Metatags } from 'react-helmet';
 
 import useForm from '../../../../macros/form/macro';
-import { Text } from 'components/widgets/fields';
+import { Password, Text } from 'components/widgets/fields';
 
 export const validationSchema = object().shape({
-  email: string().trim().min(3).max(50).email().required(),
-  password: string().trim().min(3).max(50).required(),
+  email: string()
+    .trim()
+    .min(3)
+    .max(50)
+    .email()
+    .required('This field is required.'),
+  password: string().trim().min(3).max(50).required('This field is required.'),
 });
 
 const initialValues = {
   name: 'Fernando Camargo',
   email: 'f.camargo@expertlead.de',
-  password: '1234',
+  password: '',
 };
 
 const onSubmit = (data) => console.log('submit();', { data });
 
 export default () => {
   const {
-    fields: { name: fullName, email, password },
+    fields: { name, email, password },
     dirty,
     form,
     resetForm,
@@ -36,12 +41,10 @@ export default () => {
         <form form={form}>
           <fieldset>
             <legend>Login</legend>
-            <Text field={fullName} label="Please, provide your full name" />
-            <Text field={email} label="Please, provide your e-mail" />
-            <Text field={password} label="Please, provide your pasword" />
-            <button disabled={!dirty} type="submit">
-              Submit
-            </button>
+            <Text field={name} label="Full name" />
+            <Text field={email} label="Email" />
+            <Password field={password} label="Pasword" />
+            <button type="submit">Submit</button>
             <button disabled={!dirty} onClick={resetForm} type="reset">
               Reset
             </button>
