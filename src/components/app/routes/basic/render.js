@@ -1,5 +1,6 @@
 import { object, string } from 'yup';
 import { Helmet as Metatags } from 'react-helmet';
+import { Button } from '@material-ui/core';
 
 import useForm from '../../../../macros/form/macro';
 import { Password, Text } from 'components/widgets/fields';
@@ -44,14 +45,26 @@ export default () => {
             <Text field={name} label="Full name" />
             <Text field={email} label="Email" />
             <Password field={password} label="Pasword" />
-            <button type="submit">Submit</button>
-            <button disabled={!dirty} onClick={resetForm} type="reset">
+            <Button variant="contained" color="primary" type="submit">
+              Submit
+            </Button>
+            <Button
+              disabled={!dirty}
+              onClick={resetForm}
+              color="primary"
+              type="reset"
+            >
               Reset
-            </button>
+            </Button>
           </fieldset>
         </form>
         <hr />
         <pre>{JSON.stringify(values, null, 2)}</pre>
+        <p>
+          <a href="//google.com" rel="noreferrer" target="_blank">
+            google.com
+          </a>
+        </p>
       </div>
     </>
   );

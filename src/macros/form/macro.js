@@ -127,6 +127,18 @@ function macro({
                   jSXExpressionContainer(tokens.onChange)
                 ),
                 jSXAttribute(
+                  jSXIdentifier('ref'),
+                  jSXExpressionContainer(
+                    memberExpression(
+                      memberExpression(
+                        memberExpression(identifier(hash), identifier('refs')),
+                        identifier('current')
+                      ),
+                      identifier(key)
+                    )
+                  )
+                ),
+                jSXAttribute(
                   jSXIdentifier('value'),
                   jSXExpressionContainer(
                     memberExpression(

@@ -11,7 +11,7 @@ import { Visibility, VisibilityOff } from '@material-ui/icons';
 
 import use from './hooks';
 
-export default forwardRef((props, ref) => {
+export default forwardRef((props, inputRef) => {
   const {
     className,
     error,
@@ -32,9 +32,10 @@ export default forwardRef((props, ref) => {
       <InputLabel htmlFor={id}>{label}</InputLabel>
       <OutlinedInput
         id={id}
+        inputRef={inputRef}
+        onChange={onChange}
         type={type}
         value={value}
-        onChange={onChange}
         endAdornment={
           <InputAdornment position="end">
             <IconButton onClick={onClick} onMouseDown={onMouseDown} edge="end">

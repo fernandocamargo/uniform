@@ -1,9 +1,12 @@
 import get from 'lodash/get';
 import update from 'immutability-helper';
-import { useCallback } from 'react';
+import { useCallback, useRef } from 'react';
 import { useFormik } from 'formik';
 
+import { createRefsFrom } from './helpers';
+
 export default ({ hash, ...settings }) => {
+  const refs = useRef(createRefsFrom(settings));
   const form = update(settings, {
     $merge: {
       initialStatus: { debugging: get(settings, 'debugging', false) },
@@ -23,25 +26,38 @@ export default ({ hash, ...settings }) => {
     validateForm,
     values,
   } = formik;
+  const analyze = useCallback(
+    (report) => {
+      const reason = Object.keys(report);
+
+      return !reason.length ? submitForm() : Promise.reject(reason);
+    },
+    [submitForm]
+  );
+  const debug = useCallback(([reason]) => {
+    const element = get(refs, ['current', reason, 'current'], document.body);
+
+    element.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center',
+      inline: 'center',
+    });
+    element.focus();
+
+    return element;
+  }, []);
   const submit = useCallback(
     (event) => {
-      const analyze = (report) => {
-        const reason = Object.keys(report);
-
-        return !reason.length ? submitForm() : Promise.reject(reason);
-      };
-      const debug = (reason) => console.log('error', reason);
-
       event.preventDefault();
       setStatus({ debugging: true });
 
       return validateForm().then(analyze).catch(debug);
     },
-    [setStatus, submitForm, validateForm]
+    [analyze, debug, setStatus, validateForm]
   );
   const API = {
     [hash]: {
-      $set: { debugging, dirty, errors, setFieldValue, submit, values },
+      $set: { debugging, dirty, errors, refs, setFieldValue, submit, values },
     },
     fields: { $set: {} },
   };
