@@ -1,9 +1,10 @@
 import noop from 'lodash/noop';
-import { func, node, number, oneOfType, string } from 'prop-types';
+import { bool, func, node, number, oneOfType, string } from 'prop-types';
 
 import { prevent } from 'helpers/events';
 
 export const defaultProps = {
+  disabled: false,
   onChange: noop,
   onMouseDown: prevent,
   value: '',
@@ -14,6 +15,7 @@ export const displayName = 'Fields/Password';
 
 export const propTypes = {
   className: string.isRequired,
+  disabled: bool,
   error: node,
   id: string.isRequired,
   label: node,

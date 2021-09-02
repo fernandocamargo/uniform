@@ -5,6 +5,7 @@ import { reverse } from 'helpers/boolean';
 export default ({
   onChange: change,
   className,
+  disabled,
   id,
   label,
   onMouseDown,
@@ -29,6 +30,7 @@ export default ({
 
   return {
     className,
+    disabled,
     error,
     helperText,
     id,

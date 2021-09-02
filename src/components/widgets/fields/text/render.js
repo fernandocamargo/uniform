@@ -4,13 +4,23 @@ import { TextField } from '@material-ui/core';
 import use from './hooks';
 
 export default forwardRef((props, inputRef) => {
-  const { className, error, helperText, id, label, onChange, value, variant } =
-    use(props);
+  const {
+    className,
+    disabled,
+    error,
+    helperText,
+    id,
+    label,
+    onChange,
+    value,
+    variant,
+  } = use(props);
   const classes = useMemo(() => ({ root: className }), [className]);
 
   return (
     <TextField
       classes={classes}
+      disabled={disabled}
       error={error}
       helperText={helperText}
       id={id}

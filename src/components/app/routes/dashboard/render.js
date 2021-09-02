@@ -1,11 +1,13 @@
-import { object } from 'yup';
+import { object, boolean } from 'yup';
 import { Helmet as Metatags } from 'react-helmet';
 import { Button } from '@material-ui/core';
 
 import useForm from '../../../../macros/form/macro';
 import { Switch } from 'components/widgets/fields';
 
-export const validationSchema = object().shape({});
+export const validationSchema = object().shape({
+  available: boolean().oneOf([true], 'Field must be checked'),
+});
 
 const initialValues = {
   available: false,
@@ -13,7 +15,7 @@ const initialValues = {
 
 const onSubmit = (data) => console.log('submit();', { data });
 
-export default () => {
+export default ({ className }) => {
   const {
     fields: { available },
     dirty,
@@ -27,7 +29,7 @@ export default () => {
       <Metatags>
         <title>Dashboard</title>
       </Metatags>
-      <div>
+      <div className={className}>
         <form form={form}>
           <fieldset>
             <legend>Hey, are you open for new challenges?</legend>

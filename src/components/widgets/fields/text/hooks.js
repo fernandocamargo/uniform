@@ -3,6 +3,7 @@ import { useCallback, useMemo } from 'react';
 export default ({
   onChange: change,
   className,
+  disabled,
   id,
   label,
   value,
@@ -21,5 +22,15 @@ export default ({
     [change]
   );
 
-  return { className, error, helperText, id, label, onChange, value, variant };
+  return {
+    className,
+    disabled,
+    error,
+    helperText,
+    id,
+    label,
+    onChange,
+    value,
+    variant,
+  };
 };

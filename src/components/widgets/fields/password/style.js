@@ -16,6 +16,6 @@ export default (component) => styled(component)`
   .MuiInputLabel-root[data-shrink='true'] {
     background-color: ${property('theme.palette.common.white')};
     margin-left: -5px;
-    padding: 0 5px;
+    padding: 0 7.5px 0 5px;
   }
 `;

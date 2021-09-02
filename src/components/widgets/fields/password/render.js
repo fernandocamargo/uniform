@@ -14,6 +14,7 @@ import use from './hooks';
 export default forwardRef((props, inputRef) => {
   const {
     className,
+    disabled,
     error,
     helperText,
     id,
@@ -28,7 +29,12 @@ export default forwardRef((props, inputRef) => {
   } = use(props);
 
   return (
-    <FormControl className={className} error={error} variant={variant}>
+    <FormControl
+      className={className}
+      disabled={disabled}
+      error={error}
+      variant={variant}
+    >
       <InputLabel htmlFor={id}>{label}</InputLabel>
       <OutlinedInput
         id={id}
@@ -38,7 +44,12 @@ export default forwardRef((props, inputRef) => {
         value={value}
         endAdornment={
           <InputAdornment position="end">
-            <IconButton onClick={onClick} onMouseDown={onMouseDown} edge="end">
+            <IconButton
+              disabled={disabled}
+              onClick={onClick}
+              onMouseDown={onMouseDown}
+              edge="end"
+            >
               {visible ? <Visibility /> : <VisibilityOff />}
             </IconButton>
           </InputAdornment>

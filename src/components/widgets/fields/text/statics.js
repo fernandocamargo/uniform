@@ -1,7 +1,8 @@
 import noop from 'lodash/noop';
-import { func, node, number, oneOfType, string } from 'prop-types';
+import { bool, func, node, number, oneOfType, string } from 'prop-types';
 
 export const defaultProps = {
+  disabled: false,
   onChange: noop,
   value: '',
   variant: 'outlined',
@@ -11,6 +12,7 @@ export const displayName = 'Fields/Text';
 
 export const propTypes = {
   className: string.isRequired,
+  disabled: bool,
   error: node,
   id: string.isRequired,
   label: node,
