@@ -3,6 +3,7 @@ import { Helmet as Metatags } from 'react-helmet';
 import { Button } from '@material-ui/core';
 
 import useForm from '../../../../macros/form/macro';
+import { Form } from 'components/widgets';
 import { Password, Text } from 'components/widgets/fields';
 
 export const validationSchema = object().shape({
@@ -41,7 +42,7 @@ export default () => {
         <title>Login</title>
       </Metatags>
       <div>
-        <form form={form}>
+        <Form form={form}>
           <fieldset>
             <legend>Login</legend>
             <div aria-roledescription="field">
@@ -64,8 +65,8 @@ export default () => {
               </Button>
             </div>
           </fieldset>
-        </form>
-        <pre>{JSON.stringify(values, null, 2)}</pre>
+          <pre>{JSON.stringify(values, null, 2)}</pre>
+        </Form>
       </div>
     </>
   );

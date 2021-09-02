@@ -1,7 +1,1 @@
-export default ({ label }) => (
-  <form>
-    <fieldset>
-      <legend>{label}</legend>
-    </fieldset>
-  </form>
-);
+export default (props) => <form {...props} />;
