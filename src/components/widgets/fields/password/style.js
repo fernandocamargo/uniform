@@ -10,6 +10,12 @@ export const debug = () => css`
 export const validate = ({ error }) => !!error && debug();
 
 export default (component) => styled(component)`
-  width: 100%;
   ${validate};
+  width: 100%;
+
+  .MuiInputLabel-root[data-shrink='true'] {
+    background-color: ${property('theme.palette.common.white')};
+    margin-left: -5px;
+    padding: 0 5px;
+  }
 `;

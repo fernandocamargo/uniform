@@ -1,1 +1,1 @@
-export default () => <p>Loading...</p>;
+export default ({ className }) => <p className={className}>Loading...</p>;
