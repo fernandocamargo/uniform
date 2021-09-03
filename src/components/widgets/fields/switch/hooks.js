@@ -1,10 +1,14 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 
-export default (
-  { onChange: change, className, disabled, id, label, value, ...props },
-  ref
-) => {
-  const [autoFocus, setAutoFocus] = useState(props.autoFocus);
+export default ({
+  onChange: change,
+  className,
+  disabled,
+  id,
+  label,
+  value,
+  ...props
+}) => {
   const { error, helperText } = useMemo(
     () => ({
       helperText: props.error || props.helperText,
@@ -17,29 +21,5 @@ export default (
     [change]
   );
 
-  useEffect(() => {
-    const { current: element } = ref;
-    const blur = () => setAutoFocus(false);
-    const focus = () => setAutoFocus(true);
-
-    element.addEventListener('blur', blur, false);
-    element.addEventListener('focus', focus, false);
-
-    return () => {
-      element.removeEventListener('blur', blur, false);
-      element.removeEventListener('focus', focus, false);
-    };
-  }, [ref]);
-
-  return {
-    inputProps: { autoFocus },
-    className,
-    disabled,
-    error,
-    helperText,
-    id,
-    label,
-    onChange,
-    value,
-  };
+  return { className, disabled, error, helperText, id, label, onChange, value };
 };

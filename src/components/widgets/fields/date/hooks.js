@@ -1,20 +1,17 @@
-import { useCallback, useMemo, useState } from 'react';
-
-import { reverse } from 'helpers/boolean';
+import { useCallback, useMemo } from 'react';
 
 export default ({
   onChange: change,
+  InputAdornmentProps,
   className,
   disabled,
   id,
+  inputVariant,
   label,
-  onMouseDown,
   value,
   variant,
   ...props
 }) => {
-  const [visible, setVisible] = useState(false);
-  const type = useMemo(() => (visible ? 'text' : 'password'), [visible]);
   const { error, helperText } = useMemo(
     () => ({
       helperText: props.error || props.helperText,
@@ -22,23 +19,18 @@ export default ({
     }),
     [props.error, props.helperText]
   );
-  const onClick = useCallback(() => setVisible(reverse), []);
-  const onChange = useCallback(
-    ({ target: { value } }) => change(value),
-    [change]
-  );
+  const onChange = useCallback((value) => change(value), [change]);
 
   return {
+    InputAdornmentProps,
     className,
     disabled,
     error,
     helperText,
     id,
+    inputVariant,
     label,
     onChange,
-    onClick,
-    onMouseDown,
-    type,
     value,
     variant,
   };

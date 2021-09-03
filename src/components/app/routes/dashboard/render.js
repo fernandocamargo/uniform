@@ -4,7 +4,7 @@ import { Button } from '@material-ui/core';
 
 import useForm from '../../../../macros/form/macro';
 import { Form } from 'components/widgets';
-import { Switch } from 'components/widgets/fields';
+import { Date, Switch } from 'components/widgets/fields';
 
 export const validationSchema = object().shape({
   available: boolean().oneOf([true], 'Field must be checked'),
@@ -12,13 +12,14 @@ export const validationSchema = object().shape({
 
 const initialValues = {
   available: false,
+  date: new window.Date(),
 };
 
 const onSubmit = (data) => console.log('submit();', { data });
 
 export default ({ className }) => {
   const {
-    fields: { available },
+    fields: { available, date },
     dirty,
     form,
     resetForm,
@@ -39,6 +40,9 @@ export default ({ className }) => {
                 field={available}
                 label="Yes, I am open for new projects!"
               />
+            </div>
+            <div aria-roledescription="field">
+              <Date field={date} label="Will be open from" />
             </div>
             <div aria-roledescription="controls">
               <Button variant="contained" color="primary" type="submit">

@@ -1,31 +1,21 @@
 import { forwardRef } from 'react';
-import {
-  FormControl,
-  FormHelperText,
-  IconButton,
-  InputLabel,
-  InputAdornment,
-  OutlinedInput,
-} from '@material-ui/core';
-import { Visibility, VisibilityOff } from '@material-ui/icons';
+import { FormControl, FormHelperText } from '@material-ui/core';
+import { KeyboardDatePicker } from '@material-ui/pickers';
 
 import use from './hooks';
 
 export default forwardRef((props, inputRef) => {
   const {
+    InputAdornmentProps,
     className,
     disabled,
     error,
     helperText,
-    id,
+    inputVariant,
     label,
     onChange,
-    onClick,
-    onMouseDown,
-    type,
     value,
     variant,
-    visible,
   } = use(props);
 
   return (
@@ -35,25 +25,15 @@ export default forwardRef((props, inputRef) => {
       error={error}
       variant={variant}
     >
-      <InputLabel htmlFor={id}>{label}</InputLabel>
-      <OutlinedInput
-        id={id}
-        inputRef={inputRef}
-        onChange={onChange}
-        type={type}
+      <KeyboardDatePicker
+        InputAdornmentProps={InputAdornmentProps}
+        inputVariant={inputVariant}
+        format="MM/dd/yyyy"
+        label={label}
         value={value}
-        endAdornment={
-          <InputAdornment position="end">
-            <IconButton
-              disabled={disabled}
-              onClick={onClick}
-              onMouseDown={onMouseDown}
-              edge="end"
-            >
-              {visible ? <Visibility /> : <VisibilityOff />}
-            </IconButton>
-          </InputAdornment>
-        }
+        variant="inline"
+        onChange={onChange}
+        autoOk
       />
       {!!helperText && <FormHelperText>{helperText}</FormHelperText>}
     </FormControl>
