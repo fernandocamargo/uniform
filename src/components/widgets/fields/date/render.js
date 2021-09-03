@@ -1,39 +1,25 @@
-import { forwardRef } from 'react';
-import { FormControl, FormHelperText } from '@material-ui/core';
-import { KeyboardDatePicker } from '@material-ui/pickers';
+import { forwardRef, useCallback } from 'react';
+import { FormControl, FormHelperText, TextField } from '@mui/material';
+import { DatePicker } from '@mui/lab';
 
 import use from './hooks';
 
 export default forwardRef((props, inputRef) => {
-  const {
-    InputAdornmentProps,
-    className,
-    disabled,
-    error,
-    helperText,
-    inputVariant,
-    label,
-    onChange,
-    value,
-    variant,
-  } = use(props);
+  const { disabled, error, helperText, id, label, onChange, value } =
+    use(props);
+  const renderInput = useCallback(
+    (input) => <TextField error={error} id={id} {...input} />,
+    [error, id]
+  );
 
   return (
-    <FormControl
-      className={className}
-      disabled={disabled}
-      error={error}
-      variant={variant}
-    >
-      <KeyboardDatePicker
-        InputAdornmentProps={InputAdornmentProps}
-        inputVariant={inputVariant}
-        format="MM/dd/yyyy"
+    <FormControl disabled={disabled} error={error}>
+      <DatePicker
+        inputRef={inputRef}
         label={label}
-        value={value}
-        variant="inline"
+        renderInput={renderInput}
         onChange={onChange}
-        autoOk
+        value={value}
       />
       {!!helperText && <FormHelperText>{helperText}</FormHelperText>}
     </FormControl>

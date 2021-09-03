@@ -4,7 +4,7 @@ import {
   FormControlLabel,
   FormHelperText,
   Switch,
-} from '@material-ui/core';
+} from '@mui/material';
 
 import use from './hooks';
 

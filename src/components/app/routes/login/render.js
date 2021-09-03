@@ -1,6 +1,6 @@
 import { object, string } from 'yup';
 import { Helmet as Metatags } from 'react-helmet';
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 
 import useForm from '../../../../macros/form/macro';
 import { Form } from 'components/widgets';
@@ -27,7 +27,7 @@ const initialValues = {
 
 const onSubmit = (data) => console.log('submit();', { data });
 
-export default () => {
+export default ({ className }) => {
   const {
     fields: { email, password },
     dirty,
@@ -41,7 +41,7 @@ export default () => {
       <Metatags>
         <title>Login</title>
       </Metatags>
-      <div>
+      <div className={className}>
         <Form form={form}>
           <fieldset>
             <legend>Login</legend>

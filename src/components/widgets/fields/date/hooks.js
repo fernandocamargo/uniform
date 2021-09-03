@@ -1,15 +1,12 @@
-import { useCallback, useMemo } from 'react';
+import { useMemo } from 'react';
 
 export default ({
-  onChange: change,
-  InputAdornmentProps,
+  onChange,
   className,
   disabled,
   id,
-  inputVariant,
   label,
   value,
-  variant,
   ...props
 }) => {
   const { error, helperText } = useMemo(
@@ -19,19 +16,15 @@ export default ({
     }),
     [props.error, props.helperText]
   );
-  const onChange = useCallback((value) => change(value), [change]);
 
   return {
-    InputAdornmentProps,
     className,
     disabled,
     error,
     helperText,
     id,
-    inputVariant,
     label,
     onChange,
     value,
-    variant,
   };
 };

@@ -6,8 +6,8 @@ import {
   InputLabel,
   InputAdornment,
   OutlinedInput,
-} from '@material-ui/core';
-import { Visibility, VisibilityOff } from '@material-ui/icons';
+} from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 import use from './hooks';
 

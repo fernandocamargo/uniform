@@ -1,18 +1,26 @@
-import { object, boolean } from 'yup';
+import moment from 'moment';
+import { object, boolean, string } from 'yup';
 import { Helmet as Metatags } from 'react-helmet';
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 
 import useForm from '../../../../macros/form/macro';
 import { Form } from 'components/widgets';
 import { Date, Switch } from 'components/widgets/fields';
 
 export const validationSchema = object().shape({
-  available: boolean().oneOf([true], 'Field must be checked'),
+  available: boolean().oneOf([true], 'This field must be checked.'),
+  date: string()
+    .nullable()
+    .test(
+      'Date of Birth',
+      'Should be greather than 18',
+      (_, { originalValue: value }) => moment().diff(value, 'years') >= 18
+    ),
 });
 
 const initialValues = {
   available: false,
-  date: new window.Date(),
+  date: null,
 };
 
 const onSubmit = (data) => console.log('submit();', { data });
