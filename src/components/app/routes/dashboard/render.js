@@ -8,17 +8,24 @@ import useForm from '../../../../macros/form/macro';
 import { Form } from 'components/widgets';
 import { Date, Switch } from 'components/widgets/fields';
 
-export const withinLastWeek = (_, { originalValue: value }) =>
-  !!value && value.isBetween(moment().subtract(7, 'days'), moment());
-
 export const validationSchema = object().shape({
   available: boolean().oneOf([true], 'This field must be checked.'),
   date: string()
     .nullable()
     .test(
       null,
-      'You must choose a date between the last seven days.',
-      withinLastWeek
+      null,
+      function (_, { parent: { available }, originalValue: value }) {
+        const now = moment();
+        const lastWeek = moment().subtract(7, 'days');
+        const nextWeek = moment().add(7, 'days');
+        const [since, until] = available ? [lastWeek, now] : [now, nextWeek];
+        const valid = !!value && value.isBetween(since, until);
+        const period = available ? 'last' : 'next';
+        const message = `You must choose a date within the ${period} 7 days.`;
+
+        return valid || this.createError({ path: 'date', message });
+      }
     ),
 });
 
