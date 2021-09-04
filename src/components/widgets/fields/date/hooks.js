@@ -8,6 +8,7 @@ export default ({
   id,
   inputFormat,
   label,
+  mask,
   ...props
 }) => {
   const { utils } = useContext(MuiPickersAdapterContext);
@@ -28,6 +29,7 @@ export default ({
     id,
     inputFormat,
     label,
+    mask,
     onChange,
     value,
   };

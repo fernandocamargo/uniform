@@ -8,14 +8,17 @@ import useForm from '../../../../macros/form/macro';
 import { Form } from 'components/widgets';
 import { Date, Switch } from 'components/widgets/fields';
 
+export const withinLastWeek = (_, { originalValue: value }) =>
+  !!value && value.isBetween(moment().subtract(7, 'days'), moment());
+
 export const validationSchema = object().shape({
   available: boolean().oneOf([true], 'This field must be checked.'),
   date: string()
     .nullable()
     .test(
-      'Date of Birth',
-      'Should be greather than 18',
-      (_, { originalValue: value }) => moment().diff(value, 'years') >= 18
+      null,
+      'You must choose a date between the last seven days.',
+      withinLastWeek
     ),
 });
 
@@ -36,6 +39,7 @@ export default ({ className }) => {
   } = useForm({ initialValues, onSubmit, validationSchema });
   const labels = useMemo(
     () => ({
+      available: 'Yes, I am open for new projects!',
       date: `Will be open ${values.available ? 'until' : 'from'}`,
     }),
     [values]
@@ -51,10 +55,7 @@ export default ({ className }) => {
           <fieldset>
             <legend>Hey, are you open for new challenges?</legend>
             <div aria-roledescription="field">
-              <Switch
-                field={available}
-                label="Yes, I am open for new projects!"
-              />
+              <Switch field={available} label={labels.available} />
             </div>
             <div aria-roledescription="field">
               <Date field={date} label={labels.date} />

@@ -1,4 +1,4 @@
-import { forwardRef, useCallback } from 'react';
+import { forwardRef, useCallback, useMemo } from 'react';
 import { TextField } from '@mui/material';
 import { DatePicker } from '@mui/lab';
 
@@ -17,16 +17,22 @@ export default forwardRef((props, inputRef) => {
     onChange,
     value,
   } = use(props);
+  const classes = useMemo(() => ({ root: className }), [className]);
   const renderInput = useCallback(
     (input) => (
-      <TextField {...input} error={error} helperText={helperText} id={id} />
+      <TextField
+        {...input}
+        classes={classes}
+        error={error}
+        helperText={helperText}
+        id={id}
+      />
     ),
-    [error, helperText, id]
+    [classes, error, helperText, id]
   );
 
   return (
     <DatePicker
-      className={className}
       disabled={disabled}
       inputFormat={inputFormat}
       inputRef={inputRef}
