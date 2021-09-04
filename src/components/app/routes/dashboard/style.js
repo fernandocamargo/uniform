@@ -1,7 +1,7 @@
 import property from 'lodash/property';
 import styled from 'styled-components';
 
-import { Switch } from 'components/widgets/fields';
+import { Date, Switch } from 'components/widgets/fields';
 
 export default (component) => styled(component)`
   ${Switch} {
@@ -39,6 +39,15 @@ export default (component) => styled(component)`
     .MuiFormHelperText-root {
       position: relative;
       z-index: 2;
+    }
+  }
+
+  ${Date} {
+    & + {
+      .MuiIconButton-root {
+        margin: ${({ theme: { spacing } }) =>
+          `${spacing(1)} 0 0 ${spacing(1)}`};
+      }
     }
   }
 `;

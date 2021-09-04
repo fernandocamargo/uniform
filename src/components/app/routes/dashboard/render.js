@@ -2,7 +2,8 @@ import moment from 'moment';
 import { object, boolean, string } from 'yup';
 import { useMemo } from 'react';
 import { Helmet as Metatags } from 'react-helmet';
-import { Button } from '@mui/material';
+import { Button, IconButton, Tooltip } from '@mui/material';
+import { Help } from '@mui/icons-material';
 
 import useForm from '../../../../macros/form/macro';
 import { Form } from 'components/widgets';
@@ -25,7 +26,7 @@ export const isValidDate = (
 
 export const validationSchema = object().shape({
   available: boolean().oneOf([true], 'This field must be checked.'),
-  date: string().nullable().test(null, null, isValidDate),
+  date: string().nullable().test(isValidDate),
 });
 
 const initialValues = {
@@ -65,6 +66,23 @@ export default ({ className }) => {
             </div>
             <div aria-roledescription="field">
               <Date field={date} label={labels.date} />
+              <Tooltip
+                title={
+                  <>
+                    <p>
+                      Please input the best estimated date of your next
+                      availability.
+                    </p>
+                    <p>If you are unsure of a specific date, leave it blank.</p>
+                  </>
+                }
+                placement="right"
+                arrow
+              >
+                <IconButton aria-label="Help">
+                  <Help />
+                </IconButton>
+              </Tooltip>
             </div>
             <div aria-roledescription="controls">
               <Button variant="contained" color="primary" type="submit">
