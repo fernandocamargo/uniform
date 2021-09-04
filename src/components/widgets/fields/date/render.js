@@ -1,27 +1,40 @@
 import { forwardRef, useCallback } from 'react';
-import { FormControl, FormHelperText, TextField } from '@mui/material';
+import { TextField } from '@mui/material';
 import { DatePicker } from '@mui/lab';
 
 import use from './hooks';
 
 export default forwardRef((props, inputRef) => {
-  const { disabled, error, helperText, id, label, onChange, value } =
-    use(props);
+  const {
+    className,
+    disabled,
+    error,
+    helperText,
+    id,
+    inputFormat,
+    label,
+    mask,
+    onChange,
+    value,
+  } = use(props);
   const renderInput = useCallback(
-    (input) => <TextField error={error} id={id} {...input} />,
-    [error, id]
+    (input) => (
+      <TextField {...input} error={error} helperText={helperText} id={id} />
+    ),
+    [error, helperText, id]
   );
 
   return (
-    <FormControl disabled={disabled} error={error}>
-      <DatePicker
-        inputRef={inputRef}
-        label={label}
-        renderInput={renderInput}
-        onChange={onChange}
-        value={value}
-      />
-      {!!helperText && <FormHelperText>{helperText}</FormHelperText>}
-    </FormControl>
+    <DatePicker
+      className={className}
+      disabled={disabled}
+      inputFormat={inputFormat}
+      inputRef={inputRef}
+      label={label}
+      mask={mask}
+      renderInput={renderInput}
+      onChange={onChange}
+      value={value}
+    />
   );
 });

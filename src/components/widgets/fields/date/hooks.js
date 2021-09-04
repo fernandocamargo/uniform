@@ -1,14 +1,17 @@
-import { useMemo } from 'react';
+import { useContext, useMemo } from 'react';
+import { MuiPickersAdapterContext } from '@mui/lab';
 
 export default ({
   onChange,
   className,
   disabled,
   id,
+  inputFormat,
   label,
-  value,
   ...props
 }) => {
+  const { utils } = useContext(MuiPickersAdapterContext);
+  const value = useMemo(() => utils.date(props.value), [props.value, utils]);
   const { error, helperText } = useMemo(
     () => ({
       helperText: props.error || props.helperText,
@@ -23,6 +26,7 @@ export default ({
     error,
     helperText,
     id,
+    inputFormat,
     label,
     onChange,
     value,

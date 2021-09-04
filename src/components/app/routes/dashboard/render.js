@@ -1,5 +1,6 @@
 import moment from 'moment';
 import { object, boolean, string } from 'yup';
+import { useMemo } from 'react';
 import { Helmet as Metatags } from 'react-helmet';
 import { Button } from '@mui/material';
 
@@ -33,6 +34,12 @@ export default ({ className }) => {
     resetForm,
     values,
   } = useForm({ initialValues, onSubmit, validationSchema });
+  const labels = useMemo(
+    () => ({
+      date: `Will be open ${values.available ? 'until' : 'from'}`,
+    }),
+    [values]
+  );
 
   return (
     <>
@@ -50,7 +57,7 @@ export default ({ className }) => {
               />
             </div>
             <div aria-roledescription="field">
-              <Date field={date} label="Will be open from" />
+              <Date field={date} label={labels.date} />
             </div>
             <div aria-roledescription="controls">
               <Button variant="contained" color="primary" type="submit">
