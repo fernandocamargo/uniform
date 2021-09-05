@@ -1,13 +1,13 @@
 import moment from 'moment';
-import { object, boolean, string } from 'yup';
-import { useMemo } from 'react';
+import { boolean, number, object, string } from 'yup';
+import { useCallback, useMemo } from 'react';
 import { Helmet as Metatags } from 'react-helmet';
 import { Button, IconButton, Tooltip } from '@mui/material';
 import { Help } from '@mui/icons-material';
 
 import useForm from '../../../../macros/form/macro';
 import { Form } from 'components/widgets';
-import { Date, Switch } from 'components/widgets/fields';
+import { Date, Range, Switch } from 'components/widgets/fields';
 
 export const isValidDate = (
   _,
@@ -25,11 +25,15 @@ export const isValidDate = (
 };
 
 export const validationSchema = object().shape({
+  availability: number()
+    .min(15, 'Your availability must be between 15 and 40 hours.')
+    .max(40, 'Your availability must be between 15 and 40 hours.'),
   available: boolean().oneOf([true], 'This field must be checked.'),
   date: string().nullable().test(isValidDate),
 });
 
 const initialValues = {
+  availability: 5,
   available: false,
   date: null,
 };
@@ -38,7 +42,7 @@ const onSubmit = (data) => console.log('submit();', { data });
 
 export default ({ className }) => {
   const {
-    fields: { available, date },
+    fields: { availability, available, date },
     dirty,
     form,
     resetForm,
@@ -50,6 +54,15 @@ export default ({ className }) => {
       date: `Will be open ${values.available ? 'until' : 'from'}`,
     }),
     [values]
+  );
+  const Title = useCallback(
+    () => (
+      <>
+        <p>Please input the best estimated date of your next availability.</p>
+        <p>If you are unsure of a specific date, leave it blank.</p>
+      </>
+    ),
+    []
   );
 
   return (
@@ -66,23 +79,25 @@ export default ({ className }) => {
             </div>
             <div aria-roledescription="field">
               <Date field={date} label={labels.date} />
-              <Tooltip
-                title={
-                  <>
-                    <p>
-                      Please input the best estimated date of your next
-                      availability.
-                    </p>
-                    <p>If you are unsure of a specific date, leave it blank.</p>
-                  </>
-                }
-                placement="right"
-                arrow
-              >
+              <Tooltip title={<Title />} placement="right" arrow>
                 <IconButton aria-label="Help">
                   <Help />
                 </IconButton>
               </Tooltip>
+            </div>
+            <div aria-roledescription="field">
+              <Range
+                field={availability}
+                label={
+                  <>
+                    <span>Hours per week: </span>
+                    <strong>{values.availability}</strong>
+                  </>
+                }
+                max={50}
+                min={5}
+                step={5}
+              />
             </div>
             <div aria-roledescription="controls">
               <Button variant="contained" color="primary" type="submit">

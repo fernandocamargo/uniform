@@ -43,11 +43,8 @@ export default (component) => styled(component)`
   }
 
   ${Date} {
-    & + {
-      .MuiIconButton-root {
-        margin: ${({ theme: { spacing } }) =>
-          `${spacing(1)} 0 0 ${spacing(1)}`};
-      }
+    & + .MuiIconButton-root {
+      margin: ${({ theme: { spacing } }) => `${spacing(1)} 0 0 ${spacing(1)}`};
     }
   }
 `;

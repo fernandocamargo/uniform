@@ -15,10 +15,10 @@ export default forwardRef((props, inputRef) => {
   return (
     <FormControl className={className} disabled={disabled} error={error}>
       <FormControlLabel
-        control={<Switch checked={value} onChange={onChange} />}
-        id={id}
+        control={<Switch checked={value} id={id} onChange={onChange} />}
         label={label}
         inputRef={inputRef}
+        htmlFor={id}
       />
       {!!helperText && <FormHelperText>{helperText}</FormHelperText>}
     </FormControl>
