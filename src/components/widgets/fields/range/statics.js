@@ -1,5 +1,14 @@
 import noop from 'lodash/noop';
-import { bool, func, node, number, string } from 'prop-types';
+import {
+  arrayOf,
+  bool,
+  func,
+  node,
+  number,
+  oneOfType,
+  shape,
+  string,
+} from 'prop-types';
 
 export const defaultProps = {
   disabled: false,
@@ -18,6 +27,15 @@ export const propTypes = {
   error: node,
   id: string.isRequired,
   label: node,
+  marks: oneOfType([
+    bool,
+    arrayOf(
+      shape({
+        label: node.isRequired,
+        value: number.isRequired,
+      }).isRequired
+    ),
+  ]),
   max: number,
   min: number,
   onChange: func,
