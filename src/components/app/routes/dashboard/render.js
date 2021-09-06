@@ -7,7 +7,7 @@ import { Help } from '@mui/icons-material';
 
 import useForm from '../../../../macros/form/macro';
 import { Form } from 'components/widgets';
-import { Date, Range, Switch } from 'components/widgets/fields';
+import { Date, Range, Select, Switch } from 'components/widgets/fields';
 
 export const isValidDate = (
   _,
@@ -25,14 +25,15 @@ export const isValidDate = (
 };
 
 export const validationSchema = object().shape({
+  available: boolean().oneOf([true], 'This field must be checked.'),
+  date: string().nullable().test(isValidDate),
   availability: number()
     .min(15, 'Your availability must be between 15 and 40 hours.')
     .max(40, 'Your availability must be between 15 and 40 hours.'),
-  available: boolean().oneOf([true], 'This field must be checked.'),
-  date: string().nullable().test(isValidDate),
 });
 
 const initialValues = {
+  accessibility: 'LIMITED',
   availability: 5,
   available: false,
   date: null,
@@ -40,9 +41,16 @@ const initialValues = {
 
 const onSubmit = (data) => console.log('submit();', { data });
 
+const ACCESSIBILITIES = [
+  { label: 'Unlimited travel', value: { foo: 'bar' } },
+  { label: 'Limited travel (kickoff/neighboring cities)', value: 'LIMITED' },
+  { label: 'Current City only', value: 'CURRENT_CITY' },
+  { label: 'Remote Only', value: 'REMOTE_ONLY' },
+];
+
 export default ({ className }) => {
   const {
-    fields: { availability, available, date },
+    fields: { accessibility, availability, available, date },
     dirty,
     form,
     resetForm,
@@ -85,18 +93,27 @@ export default ({ className }) => {
                 </IconButton>
               </Tooltip>
             </div>
+            {!!values.available && (
+              <div aria-roledescription="field">
+                <Range
+                  field={availability}
+                  label={
+                    <>
+                      <span>Hours per week: </span>
+                      <strong>{values.availability}</strong>
+                    </>
+                  }
+                  max={50}
+                  min={5}
+                  step={5}
+                />
+              </div>
+            )}
             <div aria-roledescription="field">
-              <Range
-                field={availability}
-                label={
-                  <>
-                    <span>Hours per week: </span>
-                    <strong>{values.availability}</strong>
-                  </>
-                }
-                max={50}
-                min={5}
-                step={5}
+              <Select
+                field={accessibility}
+                label="Accessibility"
+                options={ACCESSIBILITIES}
               />
             </div>
             <div aria-roledescription="controls">
