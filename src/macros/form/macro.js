@@ -100,10 +100,6 @@ function macro({
             case 'fields':
               return [
                 jSXAttribute(
-                  jSXIdentifier('id'),
-                  stringLiteral([hash, key].join('.'))
-                ),
-                jSXAttribute(
                   jSXIdentifier('error'),
                   jSXExpressionContainer(
                     logicalExpression(
@@ -122,6 +118,11 @@ function macro({
                     )
                   )
                 ),
+                jSXAttribute(
+                  jSXIdentifier('id'),
+                  stringLiteral([hash, key].join('.'))
+                ),
+                jSXAttribute(jSXIdentifier('name'), stringLiteral(key)),
                 jSXAttribute(
                   jSXIdentifier('onChange'),
                   jSXExpressionContainer(tokens.onChange)

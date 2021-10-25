@@ -6,10 +6,15 @@ export default ({
   disabled,
   id,
   label,
+  name,
   value,
   variant,
   ...props
 }) => {
+  const autoComplete = useMemo(
+    () => props.autoComplete || name,
+    [props.autoComplete, name]
+  );
   const { error, helperText } = useMemo(
     () => ({
       helperText: props.error || props.helperText,
@@ -23,6 +28,7 @@ export default ({
   );
 
   return {
+    autoComplete,
     className,
     disabled,
     error,

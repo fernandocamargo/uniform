@@ -5,6 +5,7 @@ import use from './hooks';
 
 export default forwardRef((props, inputRef) => {
   const {
+    autoComplete,
     className,
     disabled,
     error,
@@ -19,6 +20,7 @@ export default forwardRef((props, inputRef) => {
 
   return (
     <TextField
+      autoComplete={autoComplete}
       classes={classes}
       disabled={disabled}
       error={error}

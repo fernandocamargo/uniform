@@ -4,7 +4,7 @@ import { Button } from '@mui/material';
 
 import useForm from '../../../../macros/form/macro';
 import { Form } from 'components/widgets';
-import { Password, Text } from 'components/widgets/fields';
+import { Password, Switch, Text } from 'components/widgets/fields';
 
 export const validationSchema = object().shape({
   email: string()
@@ -23,13 +23,14 @@ export const validationSchema = object().shape({
 const initialValues = {
   email: 'f.camargo@expertlead.de',
   password: '',
+  persistence: false,
 };
 
 const onSubmit = (data) => console.log('submit();', { data });
 
 export default ({ className }) => {
   const {
-    fields: { email, password },
+    fields: { email, password, persistence },
     dirty,
     form,
     resetForm,
@@ -50,6 +51,9 @@ export default ({ className }) => {
             </div>
             <div aria-roledescription="field">
               <Password field={password} label="Pasword" />
+            </div>
+            <div aria-roledescription="field">
+              <Switch field={persistence} label="Remember me" />
             </div>
             <div aria-roledescription="controls">
               <Button variant="contained" color="primary" type="submit">

@@ -8,12 +8,17 @@ export default ({
   disabled,
   id,
   label,
+  name,
   onMouseDown,
   value,
   variant,
   ...props
 }) => {
   const [visible, setVisible] = useState(false);
+  const autoComplete = useMemo(
+    () => props.autoComplete || name,
+    [props.autoComplete, name]
+  );
   const type = useMemo(() => (visible ? 'text' : 'password'), [visible]);
   const { error, helperText } = useMemo(
     () => ({
@@ -29,6 +34,7 @@ export default ({
   );
 
   return {
+    autoComplete,
     className,
     disabled,
     error,

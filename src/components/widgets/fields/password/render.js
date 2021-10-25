@@ -13,6 +13,7 @@ import use from './hooks';
 
 export default forwardRef((props, inputRef) => {
   const {
+    autoComplete,
     className,
     disabled,
     error,
@@ -37,6 +38,7 @@ export default forwardRef((props, inputRef) => {
     >
       <InputLabel htmlFor={id}>{label}</InputLabel>
       <OutlinedInput
+        autoComplete={autoComplete}
         id={id}
         inputRef={inputRef}
         onChange={onChange}
