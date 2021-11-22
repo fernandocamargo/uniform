@@ -2,18 +2,22 @@ import { object, string } from 'yup';
 import { Helmet as Metatags } from 'react-helmet';
 import { Button } from '@mui/material';
 
-import useForm from '../../../../macros/form/macro';
+import useForm from '../../../../../../../../macros/form/macro';
 import { Form } from 'components/widgets';
-import { Password, Switch, Text } from 'components/widgets/fields';
+import { Text } from 'components/widgets/fields';
 
 export const validationSchema = object().shape({
-  email: string()
+  'first-name': string()
     .trim()
     .min(3, 'Sorry, not enough (at least 3 characters).')
     .max(50, 'Sorry, way too much (maximum of 50 characters).')
-    .email('Must be a valid email address.')
     .required('This field is required.'),
-  password: string()
+  'last-name': string()
+    .trim()
+    .min(3, 'Sorry, not enough (at least 3 characters).')
+    .max(50, 'Sorry, way too much (maximum of 50 characters).')
+    .required('This field is required.'),
+  title: string()
     .trim()
     .min(3, 'Sorry, not enough (at least 3 characters).')
     .max(50, 'Sorry, way too much (maximum of 50 characters).')
@@ -21,16 +25,16 @@ export const validationSchema = object().shape({
 });
 
 export const initialValues = {
-  email: 'f.camargo@expertlead.de',
-  password: '',
-  persistence: false,
+  'first-name': 'Fernando',
+  'last-name': 'Camargo Del Buono',
+  title: 'Full Snack Developer',
 };
 
 export const onSubmit = (data) => console.log('submit();', { data });
 
 export default ({ className }) => {
   const {
-    fields: { email, password, persistence },
+    fields: { 'first-name': firstName, 'last-name': lastName, title },
     dirty,
     form,
     resetForm,
@@ -40,20 +44,20 @@ export default ({ className }) => {
   return (
     <>
       <Metatags>
-        <title>Login</title>
+        <title>Profile &raquo; About me &raquo; Edit</title>
       </Metatags>
       <div className={className}>
         <Form form={form}>
           <fieldset>
-            <legend>Login</legend>
+            <legend>My CV/About Me</legend>
             <div aria-roledescription="field">
-              <Text field={email} label="Email" />
+              <Text field={firstName} label="First name" />
             </div>
             <div aria-roledescription="field">
-              <Password field={password} label="Pasword" />
+              <Text field={lastName} label="Last name" />
             </div>
             <div aria-roledescription="field">
-              <Switch field={persistence} label="Remember me" />
+              <Text field={title} label="Title" />
             </div>
             <div aria-roledescription="controls">
               <Button variant="contained" color="primary" type="submit">

@@ -1,1 +1,1 @@
-export default (props) => <form {...props} />;
+export default ({ theme, ...props }) => <form {...props} />;

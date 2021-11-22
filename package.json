@@ -3,18 +3,19 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@babel/types": "^7.15.6",
-    "@emotion/react": "^11.5.0",
-    "@emotion/styled": "^11.3.0",
-    "@mui/icons-material": "^5.0.4",
-    "@mui/lab": "^5.0.0-alpha.51",
-    "@mui/material": "^5.0.4",
-    "@mui/styles": "^5.0.1",
-    "@testing-library/jest-dom": "^5.14.1",
+    "@babel/types": "^7.16.0",
+    "@emotion/react": "^11.6.0",
+    "@emotion/styled": "^11.6.0",
+    "@mui/icons-material": "^5.1.1",
+    "@mui/lab": "^5.0.0-alpha.55",
+    "@mui/material": "^5.1.1",
+    "@mui/styles": "^5.1.1",
+    "@testing-library/jest-dom": "^5.15.0",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
     "chroma-js": "^2.1.2",
     "formik": "^2.2.9",
+    "history": "^5.1.0",
     "immutability-helper": "^3.1.1",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
@@ -22,7 +23,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-helmet": "^6.1.0",
-    "react-router-dom": "^5.3.0",
+    "react-router-dom": "^6.0.2",
     "react-scripts": "4.0.3",
     "styled-components": "^5.3.3",
     "web-vitals": "^2.1.2",
@@ -54,6 +55,6 @@
     ]
   },
   "devDependencies": {
-    "nodemon": "^2.0.14"
+    "nodemon": "^2.0.15"
   }
 }

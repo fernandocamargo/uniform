@@ -1,4 +1,5 @@
 export { default as Autocomplete } from './autocomplete';
+export { default as Collection } from './collection';
 export { default as Date } from './date';
 export { default as Password } from './password';
 export { default as Range } from './range';
